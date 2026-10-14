@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 840" role="img" aria-labelledby="title desc">
+  <title id="title">Photo placeholder three</title>
+  <desc id="desc">A yellow and pink placeholder for a memory photo.</desc>
+  <rect width="720" height="840" fill="#FFE9A6"/>
+  <path d="M0 638c122-84 240-100 354-46 118 56 240 42 366-42v290H0V638Z" fill="#D9EEC8"/>
+  <circle cx="360" cy="328" r="142" fill="#FFF9EC"/>
+  <path d="M310 318c0-34-46-46-66-12-18 32 16 70 66 104 50-34 84-72 66-104-20-34-66-22-66 12Z" fill="#F8B8C6"/>
+  <text x="360" y="566" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" fill="#3F714B">Tiny favorite moment</text>
+</svg>

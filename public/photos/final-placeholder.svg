@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 840" role="img" aria-labelledby="title desc">
+  <title id="title">Final photo placeholder</title>
+  <desc id="desc">A large final photo placeholder for the couple.</desc>
+  <rect width="720" height="840" fill="#FFF9EC"/>
+  <rect x="70" y="70" width="580" height="700" rx="36" fill="#D9EEC8"/>
+  <path d="M160 565c80-96 152-104 216-24 54-72 116-72 184 0 34 36 56 108 66 216H104c8-82 26-146 56-192Z" fill="#86B876"/>
+  <circle cx="278" cy="304" r="82" fill="#FFF9EC"/>
+  <circle cx="444" cy="304" r="82" fill="#FFF9EC"/>
+  <path d="M316 410c34 28 66 28 100 0" fill="none" stroke="#3F714B" stroke-width="14" stroke-linecap="round"/>
+  <text x="360" y="690" text-anchor="middle" font-family="Verdana, sans-serif" font-size="32" fill="#3F714B">Ảnh đặc biệt của hai người</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 840" role="img" aria-labelledby="title desc">
+  <title id="title">Photo placeholder two</title>
+  <desc id="desc">A cream placeholder with hand drawn leaves.</desc>
+  <rect width="720" height="840" fill="#FFF9EC"/>
+  <path d="M130 190c80 44 116 116 108 216-86-28-128-98-108-216Zm462 78c-88 24-138 82-150 174 90-8 142-66 150-174Z" fill="#86B876"/>
+  <rect x="112" y="226" width="496" height="388" rx="28" fill="#D9EEC8"/>
+  <circle cx="250" cy="390" r="82" fill="#FFF9EC"/>
+  <circle cx="470" cy="390" r="82" fill="#FFF9EC"/>
+  <path d="M280 512c62 46 112 46 160 0" fill="none" stroke="#3F714B" stroke-width="18" stroke-linecap="round"/>
+  <text x="360" y="700" text-anchor="middle" font-family="Verdana, sans-serif" font-size="34" fill="#3F714B">Một khoảnh khắc xinh</text>
+</svg>
