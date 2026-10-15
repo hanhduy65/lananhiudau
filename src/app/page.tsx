@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Gift, Heart, Music, Music2, RotateCcw, Sparkles, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { birthday, SecretLetter } from "@/data/birthday";
 
 const reveal = {
@@ -23,9 +23,19 @@ export default function Home() {
   const [musicOn, setMusicOn] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const volumeFadeRef = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
 
   const petals = useMemo(() => Array.from({ length: 18 }, (_, index) => index), []);
+
+  const stopVolumeFade = () => {
+    if (volumeFadeRef.current !== null) {
+      window.clearInterval(volumeFadeRef.current);
+      volumeFadeRef.current = null;
+    }
+  };
+
+  useEffect(() => () => stopVolumeFade(), []);
 
   const startMusic = async () => {
     const audio = audioRef.current;
@@ -33,10 +43,24 @@ export default function Home() {
 
     setAudioError(false);
     try {
+      stopVolumeFade();
       audio.muted = false;
-      audio.volume = 0.85;
+      audio.volume = 0;
       audio.loop = true;
       await audio.play();
+
+      const targetVolume = 0.55;
+      const fadeDuration = 4000;
+      const interval = 100;
+      let elapsed = 0;
+
+      volumeFadeRef.current = window.setInterval(() => {
+        elapsed += interval;
+        const progress = Math.min(elapsed / fadeDuration, 1);
+        audio.volume = targetVolume * progress;
+
+        if (progress === 1) stopVolumeFade();
+      }, interval);
     } catch {
       setAudioError(true);
     }
@@ -54,6 +78,7 @@ export default function Home() {
     setAudioError(false);
     try {
       if (musicOn) {
+        stopVolumeFade();
         audio.pause();
       } else {
         await startMusic();
