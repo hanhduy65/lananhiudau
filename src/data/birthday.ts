@@ -1,11 +1,3 @@
-export type Memory = {
-  id: string;
-  title: string;
-  caption: string;
-  src: string;
-  alt: string;
-};
-
 export type SecretLetter = {
   id: string;
   title: string;
@@ -26,29 +18,6 @@ export const birthday = {
     "Hôm nay em là nhân vật chính!",
     "Một chiếc ôm dành cho em."
   ],
-  memories: [
-    {
-      id: "memory-1",
-      title: "Ảnh tụi mình số 1",
-      caption: "Thay ảnh và caption này bằng một khoảnh khắc thật của hai đứa nhé.",
-      src: "/photos/placeholder-1.svg",
-      alt: "Placeholder ảnh kỷ niệm thứ nhất"
-    },
-    {
-      id: "memory-2",
-      title: "Một ngày rất xinh",
-      caption: "Một chỗ nhỏ để kể lại điều anh muốn em nhớ mãi.",
-      src: "/photos/placeholder-2.svg",
-      alt: "Placeholder ảnh kỷ niệm thứ hai"
-    },
-    {
-      id: "memory-3",
-      title: "Tiny favorite moment",
-      caption: "Điền một caption thật riêng, thật của hai người vào đây.",
-      src: "/photos/placeholder-3.svg",
-      alt: "Placeholder ảnh kỷ niệm thứ ba"
-    }
-  ] satisfies Memory[],
   reasonsILoveYou: [
     "Vì nụ cười của em luôn làm anh vui hơn.",
     "Vì những lúc em đáng yêu mà chẳng hề biết.",
@@ -90,10 +59,6 @@ Anh thương em ♡`,
   ] satisfies SecretLetter[],
   surpriseMessage:
     "Bí mật là: anh vẫn sẽ tiếp tục làm những điều nhỏ xinh cho em, không chỉ hôm nay, mà cả những ngày rất bình thường nữa.",
-  finalPhoto: {
-    src: "/photos/final-placeholder.svg",
-    alt: "Placeholder ảnh đặc biệt của hai người"
-  },
   music: {
     src: "/audio/birthday-song.mp3",
     title: "Birthday song"

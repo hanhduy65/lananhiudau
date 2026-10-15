@@ -2,9 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Gift, Heart, Music, Music2, RotateCcw, Sparkles, X } from "lucide-react";
-import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
-import { birthday, Memory, SecretLetter } from "@/data/birthday";
+import { birthday, SecretLetter } from "@/data/birthday";
 
 const reveal = {
   hidden: { opacity: 0, y: 26 },
@@ -14,7 +13,6 @@ const reveal = {
 export default function Home() {
   const [entered, setEntered] = useState(false);
   const [activeNote, setActiveNote] = useState<string | null>(null);
-  const [activeMemory, setActiveMemory] = useState<Memory | null>(null);
   const [openReasons, setOpenReasons] = useState<number[]>([]);
   const [letterOpen, setLetterOpen] = useState(false);
   const [candleOut, setCandleOut] = useState(false);
@@ -46,7 +44,7 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main id="top">
       <audio ref={audioRef} loop src={birthday.music.src} onError={() => setAudioError(true)} />
       <button className="music-toggle" type="button" onClick={toggleMusic} aria-label={musicOn ? "Tắt nhạc" : "Bật nhạc"}>
         {musicOn ? <Music2 size={18} /> : <Music size={18} />}
@@ -111,25 +109,6 @@ export default function Home() {
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Polaroid Lane" title="Every little moment with you ♡" intro="Những khoảnh khắc nhỏ, nhưng với anh thì thật đặc biệt.">
-        <div className="memory-strip">
-          {birthday.memories.map((memory, index) => (
-            <motion.button
-              className="polaroid"
-              key={memory.id}
-              type="button"
-              onClick={() => setActiveMemory(memory)}
-              initial={reducedMotion ? false : { opacity: 0, y: 24, rotate: -4 }}
-              whileInView={{ opacity: 1, y: 0, rotate: index % 2 ? 3 : -3 }}
-              viewport={{ once: true, amount: 0.35 }}
-            >
-              <Image src={memory.src} alt={memory.alt} width={360} height={420} />
-              <span>{memory.title}</span>
-            </motion.button>
-          ))}
-        </div>
-      </StorySection>
-
       <StorySection eyebrow="Tiny Reasons" title="5 tiny reasons why I love you" intro="Thật ra thì nhiều hơn năm điều... nhưng anh kể trước năm điều thôi nhé!">
         <div className="reason-grid">
           {birthday.reasonsILoveYou.map((reason, index) => {
@@ -188,7 +167,11 @@ export default function Home() {
 
       <StorySection eyebrow="Final Surprise" title="One more little thing...">
         <div className="finale">
-          <Image src={birthday.finalPhoto.src} alt={birthday.finalPhoto.alt} width={720} height={840} />
+          <div className="promise-mark" aria-hidden="true">
+            <Heart size={42} fill="currentColor" />
+            <Sparkles size={22} />
+            <Sparkles size={16} />
+          </div>
           <p>Thế giới có rất nhiều điều xinh đẹp, và với anh, em là một trong những điều xinh đẹp nhất.</p>
           <strong>Happy Birthday, {birthday.nickname} ♡</strong>
           <button className={`gift-box ${giftOpen ? "is-open" : ""}`} type="button" onClick={() => setGiftOpen(true)} aria-label="Mở hộp quà">
@@ -203,15 +186,6 @@ export default function Home() {
 
       <Modal open={Boolean(activeNote)} onClose={() => setActiveNote(null)}>
         <p className="modal-note">{activeNote}</p>
-      </Modal>
-      <Modal open={Boolean(activeMemory)} onClose={() => setActiveMemory(null)}>
-        {activeMemory && (
-          <div className="memory-modal">
-            <Image src={activeMemory.src} alt={activeMemory.alt} width={720} height={840} />
-            <h3>{activeMemory.title}</h3>
-            <p>{activeMemory.caption}</p>
-          </div>
-        )}
       </Modal>
       <Modal open={Boolean(secret)} onClose={() => setSecret(null)}>
         {secret && (
