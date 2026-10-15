@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "A Little Green World for Lan Anh",
-  description: "A tiny world, made with love, just for Lan Anh."
+  title: "Thế giới nhỏ của lananhiudau",
+  description: "Một thế giới nhỏ được làm bằng tình yêu, dành riêng cho lananhiudau."
 };
 
 export const viewport: Viewport = {

@@ -10,6 +10,8 @@ const reveal = {
   show: { opacity: 1, y: 0 }
 };
 
+const reasonLabels = ["Ngiu", "nhớ", "uống", "nước", "he"];
+
 export default function Home() {
   const [entered, setEntered] = useState(false);
   const [activeNote, setActiveNote] = useState<string | null>(null);
@@ -25,6 +27,27 @@ export default function Home() {
 
   const petals = useMemo(() => Array.from({ length: 18 }, (_, index) => index), []);
 
+  const startMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio || !audio.paused) return;
+
+    setAudioError(false);
+    try {
+      audio.muted = false;
+      audio.volume = 0.85;
+      audio.loop = true;
+      await audio.play();
+    } catch {
+      setAudioError(true);
+    }
+  };
+
+  const enterGarden = () => {
+    setEntered(true);
+    window.setTimeout(() => setEntered(false), 700);
+    void startMusic();
+  };
+
   const toggleMusic = async () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -32,10 +55,8 @@ export default function Home() {
     try {
       if (musicOn) {
         audio.pause();
-        setMusicOn(false);
       } else {
-        await audio.play();
-        setMusicOn(true);
+        await startMusic();
       }
     } catch {
       setAudioError(true);
@@ -45,13 +66,21 @@ export default function Home() {
 
   return (
     <main id="top">
-      <audio ref={audioRef} loop src={birthday.music.src} onError={() => setAudioError(true)} />
-      <button className="music-toggle" type="button" onClick={toggleMusic} aria-label={musicOn ? "Tắt nhạc" : "Bật nhạc"}>
+      <audio
+        ref={audioRef}
+        loop
+        preload="auto"
+        src={birthday.music.src}
+        onError={() => setAudioError(true)}
+        onPause={() => setMusicOn(false)}
+        onPlay={() => setMusicOn(true)}
+      />
+      <button className="music-toggle" type="button" onClick={toggleMusic} aria-label={musicOn ? "Tắt nhạc" : "Bật nhạc"} aria-pressed={musicOn}>
         {musicOn ? <Music2 size={18} /> : <Music size={18} />}
       </button>
-      {audioError && <p className="audio-note">Chưa tìm thấy file nhạc trong public/audio.</p>}
+      {audioError && <p className="audio-note">Không thể phát nhạc lúc này.</p>}
 
-      <section className="entrance" aria-label="The secret entrance">
+      <section className="entrance" aria-label="Lối vào bí mật">
         <div className="pattern" aria-hidden="true">
           {petals.map((petal) => (
             <motion.span
@@ -64,13 +93,13 @@ export default function Home() {
         </div>
         <motion.div className="entrance-copy" initial="hidden" animate="show" variants={reveal} transition={{ duration: 0.7 }}>
           <p className="handwritten">{birthday.tagline}</p>
-          <h1>Hey, {birthday.nickname}!</h1>
+          <h1>Chào, {birthday.nickname}!</h1>
           <p>Anh có một điều nho nhỏ dành riêng cho em...</p>
           <small>Được làm bằng rất nhiều tình yêu ♡</small>
           <motion.a
             href="#garden"
             className="primary-button"
-            onClick={() => setEntered(true)}
+            onClick={enterGarden}
             whileTap={{ scale: 0.94 }}
             animate={reducedMotion ? undefined : { y: [0, -5, 0] }}
             transition={{ duration: 1.8, repeat: Infinity }}
@@ -87,10 +116,13 @@ export default function Home() {
         </AnimatePresence>
       </section>
 
-      <StorySection id="garden" eyebrow="Little Garden" title={`Welcome to your little world, ${birthday.girlfriendName}!`}>
+      <StorySection id="garden" title={`Chào mừng đến với thế giới nhỏ của em, ${birthday.girlfriendName}!`}>
         <p className="lead">{birthday.welcomeMessage}</p>
         <p className="soft-hint">Chạm nhẹ vào vài bông hoa trong khu vườn nha.</p>
         <div className="garden-scene">
+          <div className="flower-bed" aria-hidden="true">
+            {Array.from({ length: 9 }, (_, index) => <span key={index} />)}
+          </div>
           {birthday.gardenNotes.map((note, index) => (
             <motion.button
               className={`flower-button flower-${index}`}
@@ -103,13 +135,10 @@ export default function Home() {
               <span />
             </motion.button>
           ))}
-          <div className="frog" aria-hidden="true">
-            <span />
-          </div>
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Tiny Reasons" title="5 tiny reasons why I love you" intro="Thật ra thì nhiều hơn năm điều... nhưng anh kể trước năm điều thôi nhé!">
+      <StorySection title="5 điều nhỏ xinh khiến anh yêu em" intro="Thật ra thì nhiều hơn năm điều... nhưng anh kể trước năm điều thôi nhé!">
         <div className="reason-grid">
           {birthday.reasonsILoveYou.map((reason, index) => {
             const opened = openReasons.includes(index);
@@ -120,7 +149,7 @@ export default function Home() {
                 type="button"
                 onClick={() => setOpenReasons((current) => (current.includes(index) ? current.filter((item) => item !== index) : [...current, index]))}
               >
-                <span className="reason-front">Lý do {index + 1}</span>
+                <span className="reason-front">{reasonLabels[index]}</span>
                 <span className="reason-back">{reason}</span>
               </button>
             );
@@ -128,7 +157,7 @@ export default function Home() {
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Love Letter" title="A little letter for my favorite girl">
+      <StorySection title="Một lá thư nhỏ dành cho cô gái anh yêu">
         <div className={`letter-stage ${letterOpen ? "is-open" : ""}`}>
           <button className="envelope" type="button" onClick={() => setLetterOpen(true)} aria-expanded={letterOpen}>
             <span className="flap" />
@@ -142,7 +171,7 @@ export default function Home() {
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Birthday Wish" title="Make a wish, birthday girl!" intro={`Ước một điều thật xinh nhé, ${birthday.girlfriendName}!`}>
+      <StorySection title="Ước một điều nhé, cô gái sinh nhật!" intro={`Ước một điều thật xinh nhé, ${birthday.girlfriendName}!`}>
         <div className="cake-stage">
           <div className={`cake ${candleOut ? "is-out" : ""}`}>
             <span className="candle"><i /></span>
@@ -151,11 +180,11 @@ export default function Home() {
             <span className="layer bottom" />
           </div>
           <button className="primary-button small" type="button" onClick={() => setCandleOut(true)}>Thổi nến nào!</button>
-          {candleOut && <motion.p className="birthday-message" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>Happy Birthday, {birthday.girlfriendName}!</motion.p>}
+          {candleOut && <motion.p className="birthday-message" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>Chúc mừng sinh nhật, {birthday.girlfriendName}!</motion.p>}
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Secret Letters" title="Open when...">
+      <StorySection title="Mở khi...">
         <div className="secret-row">
           {birthday.secretLetters.map((item) => (
             <button className="mini-envelope" key={item.id} type="button" onClick={() => setSecret(item)}>
@@ -165,7 +194,7 @@ export default function Home() {
         </div>
       </StorySection>
 
-      <StorySection eyebrow="Final Surprise" title="One more little thing...">
+      <StorySection title="Còn một điều nhỏ nữa...">
         <div className="finale">
           <div className="promise-mark" aria-hidden="true">
             <Heart size={42} fill="currentColor" />
@@ -173,7 +202,7 @@ export default function Home() {
             <Sparkles size={16} />
           </div>
           <p>Thế giới có rất nhiều điều xinh đẹp, và với anh, em là một trong những điều xinh đẹp nhất.</p>
-          <strong>Happy Birthday, {birthday.nickname} ♡</strong>
+          <strong>Chúc mừng sinh nhật, {birthday.nickname} ♡</strong>
           <button className={`gift-box ${giftOpen ? "is-open" : ""}`} type="button" onClick={() => setGiftOpen(true)} aria-label="Mở hộp quà">
             <Gift size={42} />
           </button>
@@ -199,10 +228,9 @@ export default function Home() {
   );
 }
 
-function StorySection({ children, eyebrow, id, intro, title }: { children: React.ReactNode; eyebrow: string; id?: string; intro?: string; title: string }) {
+function StorySection({ children, id, intro, title }: { children: React.ReactNode; id?: string; intro?: string; title: string }) {
   return (
     <motion.section className="story-section" id={id} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.22 }} variants={reveal}>
-      <p className="eyebrow">{eyebrow}</p>
       <h2>{title}</h2>
       {intro && <p className="lead">{intro}</p>}
       {children}
